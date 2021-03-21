@@ -8,9 +8,9 @@ logger.setLevel(logging.INFO)
 
 twilio_account_sid = os.environ['TWILIO_ACCOUNT_SID']
 twilio_auth_token = os.environ['TWILIO_AUTH_TOKEN']
-TWILIO_FROM_NUM = "+16692382013"
-TO_NUM_1 = "+19782210132"
-TO_NUM_2 = "+18123915218"
+twilio_from_num = os.environ['TWILIO_FROM_NUM']
+twilio_to_num_1 = os.environ['TWILIO_TO_NUM_1']
+twilio_to_num_2 = os.environ['TWILIO_TO_NUM_2']
 westinURL = "https://westin-homes.com/subdivision/santa-rita-ranch-south/"
 westinNoInventory = "No Inventory Available"
 
@@ -34,11 +34,11 @@ def send_msg():
     logger.info("Build and send msg!")
     client = Client(twilio_account_sid, twilio_auth_token)
     message = client.messages.create(body="Westin Homes Inventory Is Open!!",
-                                     from_ =TWILIO_FROM_NUM, to=TO_NUM_1)
+                                     from_ =twilio_from_num, to=twilio_to_num_1)
     logger.info(message.sid)
 
     message = client.messages.create(body="Westin Homes Inventory Is Open!!",
-                                     from_=TWILIO_FROM_NUM, to=TO_NUM_2)
+                                     from_=twilio_from_num, to=twilio_to_num_2)
     logger.info(message.sid)
 
 
