@@ -1,8 +1,13 @@
 FROM python:3.9
 
-WORKDIR /usr/src/app
-
-COPY . .
+RUN mkdir /scratch
+WORKDIR /scratch
+COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["./entrypoint.sh"]
+COPY ./entrypoint.sh .
+COPY ./env_file .
+COPY ./main.py .
+RUN chmod -R 755 /scratch
+
+CMD ["./entrypoint.sh"]
