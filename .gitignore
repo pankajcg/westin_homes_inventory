@@ -1,1 +1,4 @@
 .idea
+gcloud
+venv
+env_file
