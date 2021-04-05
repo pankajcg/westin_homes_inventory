@@ -2,4 +2,4 @@
 
 cd /scratch
 source ./env_file
-exec python3 ./main.py 30
+exec python3 ./main.py 45

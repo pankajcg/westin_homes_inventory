@@ -1,7 +1,6 @@
 import sys, urllib.request
-import time, logging, os, threading
+import time, logging, os
 from twilio.rest import Client
-from http.server import BaseHTTPRequestHandler, HTTPServer
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 logger = logging.getLogger('main')
@@ -14,8 +13,6 @@ twilio_to_num_1 = os.environ['TWILIO_TO_NUM_1']
 twilio_to_num_2 = os.environ['TWILIO_TO_NUM_2']
 westinURL = "https://westin-homes.com/subdivision/santa-rita-ranch-south/"
 westinNoInventory = "No Inventory Available"
-serverHostName = "localhost"
-serverPort = 8080
 
 def check_inventory():
     try:
@@ -64,35 +61,7 @@ def inventory_checker(sTimeSecs):
                 return
         time.sleep(sTimeSecs)
 
-class HttpServer(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        self.wfile.write(bytes("<html><head><title>Web Server</title></head>", "utf-8"))
-        self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
-        self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes("<p>Sorry, nothing here!! :( </p>", "utf-8"))
-        self.wfile.write(bytes("</body></html>", "utf-8"))
-
-def start_server():
-    webServer = HTTPServer((serverHostName, serverPort), HttpServer)
-    logger.info('Starting server (http://%s:%s)...', serverHostName, serverPort)
-
-    try:
-        webServer.serve_forever()
-    except KeyboardInterrupt:
-        pass
-
-    webServer.server_close()
-    logger.info('Stopping server thread...')
-
 
 if __name__ == '__main__':
     sTimeSecs = int(sys.argv[1])
-    inv_chk_thr = threading.Thread(target=inventory_checker, args=(sTimeSecs,))
-    dummy_server = threading.Thread(target=start_server(), args=())
-    inv_chk_thr.start()
-    dummy_server.start()
-    inv_chk_thr.join()
-    dummy_server.join()
+    inventory_checker(sTimeSecs)
